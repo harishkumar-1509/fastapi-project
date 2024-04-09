@@ -4,6 +4,7 @@ from sqlalchemy.ext.declarative import declarative_base
 import os
 from dotenv import load_dotenv
 import urllib.parse
+from typing import Generator
 
 load_dotenv()
 
@@ -27,3 +28,10 @@ engine = create_engine(URL_DATABASE)
 SessionLocal = sessionmaker(autocommit = False, autoflush = False, bind = engine)
 
 Base = declarative_base()
+
+def get_session() -> Generator:
+    session = SessionLocal()
+    try:
+        yield session
+    finally:
+        session.close()
